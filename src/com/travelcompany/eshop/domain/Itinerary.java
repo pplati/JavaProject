@@ -66,4 +66,16 @@ public class Itinerary {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Itinerary{" +
+                "id=" + id +
+                ", departureCode=" + departureCode +
+                ", destinationCode=" + destinationCode +
+                ", date='" + date + '\'' +
+                ", airline='" + airline + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }
