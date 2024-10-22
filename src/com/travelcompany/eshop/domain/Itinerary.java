@@ -1,5 +1,6 @@
 package com.travelcompany.eshop.domain;
 
+import com.travelcompany.eshop.enumeration.Airlines;
 import com.travelcompany.eshop.enumeration.AirportCode;
 
 public class Itinerary {
@@ -7,10 +8,10 @@ public class Itinerary {
     private AirportCode departureCode;
     private AirportCode destinationCode;
     private String date;
-    private String airline;
+    private Airlines airline;
     private double price;
 
-    public Itinerary(Long id, AirportCode departureCode, AirportCode destinationCode, String date, String airline, double price) {
+    public Itinerary(Long id, AirportCode departureCode, AirportCode destinationCode, String date, Airlines airline, double price) {
         this.id = id;
         this.departureCode = departureCode;
         this.destinationCode = destinationCode;
@@ -51,11 +52,11 @@ public class Itinerary {
         this.date = date;
     }
 
-    public String getAirline() {
+    public Airlines getAirline() {
         return airline;
     }
 
-    public void setAirline(String airline) {
+    public void setAirline(Airlines airline) {
         this.airline = airline;
     }
 
