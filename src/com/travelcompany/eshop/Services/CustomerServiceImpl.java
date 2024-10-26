@@ -10,14 +10,15 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public void add(Customer customer) {
+        this.customers.add(customer);
     }
 
     @Override
     public List<Customer> findAll() {
-        return null;
+        return this.customers;
     }
 
-    public Customer get(Long id){
+    public Customer getById(Long id){
         for (Customer customer : customers) {
             if(customer.getId().equals(id)){
                 return customer;

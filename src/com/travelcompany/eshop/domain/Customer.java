@@ -1,8 +1,9 @@
 package com.travelcompany.eshop.domain;
 
+import com.travelcompany.eshop.enumeration.Category;
 import com.travelcompany.eshop.enumeration.Nationality;
 
-public class Customer {
+public abstract class Customer {
     private Long id;
     private String name;
     private String email;
@@ -57,6 +58,8 @@ public class Customer {
     public void setNationality(Nationality nationality) {
         this.nationality = nationality;
     }
+
+    public abstract Category getCategory();
 
     @Override
     public String toString() {

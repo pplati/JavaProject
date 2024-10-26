@@ -7,8 +7,14 @@ public class Ticket {
     private Customer customer;
     private Itinerary itinerary;
     private Payment paymentMethod;
-    //Price
+    private double paymentAmount;
 
+    public Ticket(Long id, Customer customer, Itinerary itinerary, Payment paymentMethod) {
+        this.id = id;
+        this.customer = customer;
+        this.itinerary = itinerary;
+        this.paymentMethod = paymentMethod;
+    }
 
     public Long getId() {
         return id;
@@ -42,20 +48,22 @@ public class Ticket {
         this.paymentMethod = paymentMethod;
     }
 
-    public Ticket(Long id, Customer customer, Itinerary itinerary, Payment paymentMethod) {
-        this.id = id;
-        this.customer = customer;
-        this.itinerary = itinerary;
-        this.paymentMethod = paymentMethod;
+    public double getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(double paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     @Override
     public String toString() {
         return "Ticket{" +
                 "id=" + id +
-                ", customer=" + customer +
-                ", itinerary=" + itinerary +
+                ", customer id=" + customer.getId() +
+                ", itinerary id=" + itinerary.getId() +
                 ", paymentMethod=" + paymentMethod +
+                ", paymentAmount=" + paymentAmount +
                 '}';
     }
 }
