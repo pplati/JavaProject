@@ -38,11 +38,38 @@ public class TravelCompanyEShop {
 
         ticketService.add(new Ticket(1L, customerList.get(0), itineraryList.get(0), Payment.CREDIT_CARD));
         ticketService.add(new Ticket(2L, customerList.get(1), itineraryList.get(1), Payment.CASH));
-        ticketService.add(new Ticket(3L, customerList.get(2), itineraryList.get(2), Payment.CREDIT_CARD));
+        ticketService.add(new Ticket(3L, customerList.get(0), itineraryList.get(2), Payment.CREDIT_CARD));
         List<Ticket> ticketList = ticketService.findAll();
 
-        for (Ticket ticket:ticketList)
-            System.out.println(ticket);
+//        totalTickets(ticketList,customerList);
+//        System.out.println();
+//        totalCost(ticketList,customerList);
+    }
+
+    //Συνολικά εισιτήρια για κάθε πελάτη
+    public static void totalTickets(List<Ticket> ticketList, List<Customer> customerList) {
+        for (Customer customer : customerList) {
+            int totalTickets = 0;
+            for (Ticket ticket : ticketList) {
+                if (customer.getId() == ticket.getCustomer().getId()){
+                    totalTickets = totalTickets + 1;
+                }
+            }
+            System.out.println(customer.getName() + " has " + totalTickets + " tickets");
+        }
+    }
+
+    //Συνολικό Κόστος εισιτηρίων για κάθε πελάτη
+    public static void totalCost (List<Ticket> ticketList, List<Customer> customerList) {
+        for (Customer customer : customerList) {
+            double totalCost = 0;
+            for (Ticket ticket : ticketList) {
+                if (customer.getId() == ticket.getCustomer().getId()){
+                    totalCost = totalCost + ticket.getPaymentAmount();
+                }
+            }
+            System.out.println(customer.getName() + " paid " + totalCost + " euros");
+        }
     }
 
 
