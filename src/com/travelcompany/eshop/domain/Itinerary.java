@@ -20,6 +20,15 @@ public class Itinerary {
         this.price = price;
     }
 
+    public Itinerary (Itinerary other){
+        this.id = other.getId();
+        this.departureCode = other.getDepartureCode();
+        this.destinationCode = other.getDestinationCode();
+        this.date = other.getDate();
+        this.airline = other.getAirline();
+        this.price = other.getPrice();
+    }
+
     public Long getId() {
         return id;
     }
@@ -79,4 +88,5 @@ public class Itinerary {
                 ", price=" + price +
                 '}';
     }
+
 }
