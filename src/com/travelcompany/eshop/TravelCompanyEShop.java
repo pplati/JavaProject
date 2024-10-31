@@ -6,6 +6,7 @@ import com.travelcompany.eshop.enumeration.Airlines;
 import com.travelcompany.eshop.enumeration.AirportCode;
 import com.travelcompany.eshop.enumeration.Nationality;
 import com.travelcompany.eshop.enumeration.Payment;
+import com.travelcompany.eshop.exception.CustomerEmailException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,12 +17,18 @@ public class TravelCompanyEShop {
         // Προσθήκη Πελατών
         CustomerService customerService = new CustomerServiceImpl();
 
-        customerService.add(new CustomerBusiness(1L, "Yiota Plati",
-                "yiotap@gmail.com", "Athens", Nationality.GREEK));
-        customerService.add(new CustomerIndividual(2L, "Maria Iordanou", "miordanou@gmail.com",
-                "Athens", Nationality.GREEK));
-        customerService.add(new CustomerIndividual(3L, "Dimitriou Dimitrios", "dimitriou@gmail.com",
-                "Athens", Nationality.GREEK));
+        try {
+            customerService.add(new CustomerBusiness(1L, "Yiota Plati",
+                    "yiotap@gmail.com", "Athens", Nationality.GREEK));
+            customerService.add(new CustomerIndividual(2L, "Maria Iordanou", "miordanou@gmail.com",
+                    "Athens", Nationality.GREEK));
+            customerService.add(new CustomerIndividual(3L, "Dimitriou Dimitrios", "dimitriou@gmail.com",
+                    "Athens", Nationality.GREEK));
+            customerService.add(new CustomerBusiness(4L, "Antonio Molinari", "antonio@travelcompany.com",
+                    "Rome", Nationality.ITALIAN));
+        }catch (CustomerEmailException e){
+            System.out.println(e.getMessage());
+        }
         List<Customer> customerList = customerService.findAll();
 
         // Προσθήκη Δρομολογίων
