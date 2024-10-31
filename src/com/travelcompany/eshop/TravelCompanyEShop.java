@@ -8,6 +8,7 @@ import com.travelcompany.eshop.enumeration.Nationality;
 import com.travelcompany.eshop.enumeration.Payment;
 import com.travelcompany.eshop.exception.CustomerEmailException;
 import com.travelcompany.eshop.exception.ItineraryAirportException;
+import com.travelcompany.eshop.exception.TicketIssuingException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,10 @@ public class TravelCompanyEShop {
         }
         List<Customer> customerList = customerService.findAll();
 
+        for (Customer customer : customerList){
+            System.out.println(customer);
+        }
+        System.out.println();
         // Προσθήκη Δρομολογίων
         ItineraryService itineraryService = new ItineraryServiceImpl();
 
@@ -49,146 +54,48 @@ public class TravelCompanyEShop {
         }
         List<Itinerary> itineraryList = itineraryService.findAll();
 
+        for (Itinerary itinerary : itineraryList){
+            System.out.println(itinerary);
+        }
+        System.out.println();
+
         // Προσθήκη Εισιτηρίων
         TicketService ticketService = new TicketServiceImpl();
 
-        ticketService.add(new Ticket(1L, customerList.get(0), itineraryList.get(0), Payment.CREDIT_CARD));
-        ticketService.add(new Ticket(2L, customerList.get(1), itineraryList.get(1), Payment.CASH));
-        ticketService.add(new Ticket(3L, customerList.get(0), itineraryList.get(2), Payment.CREDIT_CARD));
+        try {
+            ticketService.add(new Ticket(1L, customerList.get(0), itineraryList.get(0), Payment.CREDIT_CARD), customerList, itineraryList);
+            ticketService.add(new Ticket(2L, customerList.get(1), itineraryList.get(1), Payment.CASH), customerList, itineraryList);
+            ticketService.add(new Ticket(3L, customerList.get(0), itineraryList.get(2), Payment.CREDIT_CARD), customerList, itineraryList);
+            ticketService.add(new Ticket(4L, new CustomerBusiness(4L, "Antonio Molinari", "amolinari@mail.com",
+                    "Rome", Nationality.ITALIAN), itineraryList.get(2), Payment.CREDIT_CARD), customerList, itineraryList);
+        }catch (TicketIssuingException e){
+            System.out.println(e.getMessage());
+        }
         List<Ticket> ticketList = ticketService.findAll();
 
-//        totalTickets(ticketList,customerList);
-//        System.out.println();
-//        totalCost(ticketList,customerList);
+        for (Ticket ticket : ticketList){
+            System.out.println(ticket);
+        }
+        System.out.println();
 
-//        totalItinerariesDest(itineraryList);
-//        System.out.println();
-//        totalItinerariesDep(itineraryList);
+        // Reportings
+        ReportingService reportingService = new ReportingServiceImpl();
 
-//        maxTickets(customerList, ticketList);
-//        System.out.println();
-//        maxExpenses(customerList, ticketList);
+        reportingService.totalTickets(ticketList,customerList);
+        System.out.println();
+        reportingService.totalCost(ticketList,customerList);
+        System.out.println();
 
-//        zeroTickets(customerList, ticketList);
+        reportingService.totalItinerariesDest(itineraryList);
+        System.out.println();
+        reportingService.totalItinerariesDep(itineraryList);
+        System.out.println();
+
+        reportingService.maxTickets(customerList, ticketList);
+        System.out.println();
+        reportingService.maxExpenses(customerList, ticketList);
+        System.out.println();
+
+        reportingService.zeroTickets(customerList, ticketList);
     }
-
-    //Συνολικά εισιτήρια για κάθε πελάτη
-    public static void totalTickets(List<Ticket> ticketList, List<Customer> customerList) {
-        for (Customer customer : customerList) {
-            int totalTickets = 0;
-            for (Ticket ticket : ticketList) {
-                if (customer.getId() == ticket.getCustomer().getId()) {
-                    totalTickets = totalTickets + 1;
-                }
-            }
-            System.out.println(customer.getName() + " has " + totalTickets + " tickets");
-        }
-    }
-
-    //Συνολικό Κόστος εισιτηρίων για κάθε πελάτη
-    public static void totalCost(List<Ticket> ticketList, List<Customer> customerList) {
-        for (Customer customer : customerList) {
-            double totalCost = 0;
-            for (Ticket ticket : ticketList) {
-                if (customer.getId() == ticket.getCustomer().getId()) {
-                    totalCost = totalCost + ticket.getPaymentAmount();
-                }
-            }
-            System.out.println(customer.getName() + " paid " + totalCost + " euros");
-        }
-    }
-
-    //Συνολικός αριθμός δρομολογίων προορισμών
-    public static void totalItinerariesDest(List<Itinerary> itineraryList) {
-        List<Itinerary> itineraries = new ArrayList<>();
-        for (Itinerary itinerary : itineraryList) {
-            itineraries.add(new Itinerary(itinerary));
-        }
-        for (Itinerary itinerary1 : itineraryList) {
-            int totalDest = 0;
-            for (Itinerary itinerary2 : itineraries) {
-                if (itinerary1.getDestinationCode() == itinerary2.getDestinationCode()) {
-                    totalDest = totalDest + 1;
-                    itinerary2.setDestinationCode(null);
-                }
-            }
-            if (totalDest != 0) {
-                System.out.println("The number of itineraries for " + itinerary1.getDestinationCode() + " is " + totalDest);
-            }
-        }
-    }
-
-    //Συνολικός αριθμός δρομολογίων αναχωρήσεων
-    public static void totalItinerariesDep(List<Itinerary> itineraryList) {
-        List<Itinerary> itineraries = new ArrayList<>();
-        for (Itinerary itinerary : itineraryList) {
-            itineraries.add(new Itinerary(itinerary));
-        }
-        for (Itinerary itinerary1 : itineraryList) {
-            int totalDep = 0;
-            for (Itinerary itinerary2 : itineraries) {
-                if (itinerary1.getDepartureCode() == itinerary2.getDepartureCode()) {
-                    totalDep = totalDep + 1;
-                    itinerary2.setDepartureCode(null);
-                }
-            }
-            if (totalDep != 0) {
-                System.out.println("The number of itineraries for " + itinerary1.getDepartureCode() + " is " + totalDep);
-            }
-        }
-    }
-
-    //Πελάτης με τα περισσότερα εισιτήρια
-    public static void maxTickets (List<Customer> customerList, List<Ticket> ticketList){
-        int maxTickets = 0;
-        Customer maxTicketCustomer = null;
-        for (Customer customer : customerList) {
-            int totalTickets = 0;
-            for (Ticket ticket : ticketList) {
-                if (customer.getId() == ticket.getCustomer().getId()) {
-                    totalTickets = totalTickets + 1;
-                }
-            }
-            if (totalTickets > maxTickets){
-                maxTickets = totalTickets;
-                maxTicketCustomer = customer;
-            }
-        }
-        System.out.println("The customer with the most tickets is " + maxTicketCustomer);
-    }
-
-    //Πελάτης με τα περισσότερα έξοδα
-    public static void maxExpenses (List<Customer> customerList, List<Ticket> ticketList) {
-        double  maxExpenses = 0.0;
-        Customer maxExpensesCustomer = null;
-        for (Customer customer : customerList) {
-            double totalCost = 0;
-            for (Ticket ticket : ticketList) {
-                if (customer.getId() == ticket.getCustomer().getId()) {
-                    totalCost = totalCost + ticket.getPaymentAmount();
-                }
-            }
-            if ( totalCost > maxExpenses){
-                maxExpenses = totalCost;
-                maxExpensesCustomer = customer;
-            }
-        }
-        System.out.println("The customer with the most expenses is " + maxExpensesCustomer);
-    }
-
-    //Πελάτες με 0 εισιτήρια
-    public static void zeroTickets (List<Customer> customerList, List<Ticket> ticketList) {
-        for (Customer customer : customerList) {
-            int totalTickets = 0;
-            for (Ticket ticket : ticketList) {
-                if (customer.getId() == ticket.getCustomer().getId()) {
-                    totalTickets = totalTickets + 1;
-                }
-            }
-            if (totalTickets == 0){
-                System.out.println("The customer with no tickets is " + customer);
-            }
-        }
-    }
-
 }
