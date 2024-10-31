@@ -7,6 +7,7 @@ import com.travelcompany.eshop.enumeration.AirportCode;
 import com.travelcompany.eshop.enumeration.Nationality;
 import com.travelcompany.eshop.enumeration.Payment;
 import com.travelcompany.eshop.exception.CustomerEmailException;
+import com.travelcompany.eshop.exception.ItineraryAirportException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,12 +35,18 @@ public class TravelCompanyEShop {
         // Προσθήκη Δρομολογίων
         ItineraryService itineraryService = new ItineraryServiceImpl();
 
-        itineraryService.add(new Itinerary(1L, AirportCode.ATH, AirportCode.PAR, "22/02/2022 13:35",
-                Airlines.SkyLines, 300.00));
-        itineraryService.add(new Itinerary(2L, AirportCode.ATH, AirportCode.LON, "22/02/2022 13:40",
-                Airlines.SkyLines, 420.00));
-        itineraryService.add(new Itinerary(3L, AirportCode.ATH, AirportCode.PAR, "22/02/2022 13:45",
-                Airlines.SkyLines, 280.00));
+        try {
+            itineraryService.add(new Itinerary(1L, AirportCode.ATH, AirportCode.PAR, "22/02/2022 13:35",
+                    Airlines.SkyLines, 300.00));
+            itineraryService.add(new Itinerary(2L, AirportCode.ATH, AirportCode.LON, "22/02/2022 13:40",
+                    Airlines.SkyLines, 420.00));
+            itineraryService.add(new Itinerary(3L, AirportCode.ATH, AirportCode.PAR, "22/02/2022 13:45",
+                    Airlines.SkyLines, 280.00));
+            itineraryService.add(new Itinerary(4L, AirportCode.ATH, AirportCode.ATH, "22/02/2022 13:45",
+                    Airlines.SkyLines, 280.00));
+        }catch (ItineraryAirportException e){
+            System.out.println(e.getMessage());
+        }
         List<Itinerary> itineraryList = itineraryService.findAll();
 
         // Προσθήκη Εισιτηρίων
